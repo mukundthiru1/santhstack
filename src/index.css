@@ -1,24 +1,56 @@
 /* ============================================
-   SANTH STACK — Design System
-   Industrial monochrome. Security tooling.
+   SANTH STACK — Unified Design System
+   Shares tokens with santh.io hub.
+   Industrial monochrome. Color is signal.
    ============================================ */
 
-/* --- Reset & Tokens --- */
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ── Shared Tokens (from santh.io) ── */
 :root {
-  --font-sans: 'Inter', -apple-system, system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-  --bg: #08090a;
-  --bg-elevated: #0c0d0f;
-  --bg-card: #0e1012;
-  --border: rgba(255, 255, 255, 0.04);
-  --border-hover: rgba(255, 255, 255, 0.08);
+  --white: #FFFFFF;
+  --black: #000000;
+  --off-black: #0A0A0A;
+
+  /* Grays */
+  --gray-300: #C0C0C0;
+  --gray-500: #707070;
+  --gray-700: #383838;
+  --gray-800: #252525;
+  --gray-900: #181818;
+  --gray-950: #0E0E0E;
+
+  /* Functional borders */
+  --border-subtle: rgba(255, 255, 255, 0.04);
+  --border-light: rgba(255, 255, 255, 0.08);
+  --border-medium: rgba(255, 255, 255, 0.12);
+
+  /* Easing */
+  --ease-mechanical: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-snap: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Font stacks — same as hub */
+  --font-display: 'Space Grotesk', -apple-system, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+  --font-body: 'Inter', -apple-system, system-ui, sans-serif;
+
+  /* Signal colors — same as hub */
+  --signal-defense: #4A9EFF;
+  --signal-defense-dim: rgba(74, 158, 255, 0.15);
+  --signal-defense-glow: rgba(74, 158, 255, 0.25);
+  --signal-defense-subtle: rgba(74, 158, 255, 0.06);
+
+  --signal-threat: #D4A03A;
+  --signal-threat-dim: rgba(212, 160, 58, 0.15);
+
+  /* Text */
   --text-primary: rgba(255, 255, 255, 0.85);
   --text-secondary: rgba(255, 255, 255, 0.45);
   --text-muted: rgba(255, 255, 255, 0.15);
   --text-ghost: rgba(255, 255, 255, 0.08);
-  --accent: rgba(255, 255, 255, 0.6);
 }
 
+/* ── Reset ── */
 *,
 *::before,
 *::after {
@@ -32,30 +64,56 @@ html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body {
-  font-family: var(--font-sans);
-  background: var(--bg);
-  color: var(--text-secondary);
+  font-family: var(--font-body);
+  background: var(--black);
+  color: var(--gray-300);
   line-height: 1.6;
   min-height: 100vh;
   overflow-x: hidden;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
 }
 
 a {
-  color: var(--accent);
+  color: rgba(255, 255, 255, 0.55);
   text-decoration: none;
-  transition: opacity 0.15s ease;
+  transition: color 0.2s var(--ease-mechanical);
 }
 
 a:hover {
-  opacity: 0.7;
+  color: rgba(255, 255, 255, 0.8);
 }
 
 ::selection {
-  background: rgba(255, 255, 255, 0.12);
-  color: white;
+  background: var(--signal-defense-dim);
+  color: var(--white);
+}
+
+/* ── Scrollbar (matches hub) ── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--signal-defense-dim);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--signal-defense-glow);
+}
+
+/* ── Focus ── */
+*:focus-visible {
+  outline: 1px solid rgba(255, 255, 255, 0.3);
+  outline-offset: 2px;
 }
 
 /* ============================================
@@ -80,13 +138,13 @@ a:hover {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(8, 9, 10, 0.85);
+  background: rgba(0, 0, 0, 0.85);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 .nav__brand {
-  font-family: var(--font-sans);
+  font-family: var(--font-display);
   font-weight: 600;
   font-size: 14px;
   letter-spacing: 0.12em;
@@ -97,7 +155,7 @@ a:hover {
 .nav__brand span {
   font-weight: 300;
   color: var(--text-muted);
-  margin-left: 4px;
+  margin-left: 2px;
 }
 
 .nav__links {
@@ -109,14 +167,13 @@ a:hover {
 .nav__link {
   font-family: var(--font-mono);
   font-size: 11px;
-  color: var(--text-muted);
+  color: rgba(255, 255, 255, 0.35);
   letter-spacing: 0.04em;
-  transition: color 0.15s;
+  transition: color 0.2s var(--ease-mechanical);
 }
 
 .nav__link:hover {
-  color: var(--text-secondary);
-  opacity: 1;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 /* ============================================
@@ -137,11 +194,12 @@ a:hover {
 }
 
 .hero__title {
-  font-family: var(--font-sans);
+  font-family: var(--font-display);
   font-size: clamp(2.5rem, 5vw, 4rem);
   font-weight: 600;
   color: var(--text-primary);
   line-height: 1.1;
+  letter-spacing: -0.03em;
   margin-bottom: 28px;
   max-width: 700px;
 }
@@ -167,29 +225,41 @@ a:hover {
   padding: 12px 24px;
   font-family: var(--font-mono);
   font-size: 11px;
-  letter-spacing: 0.04em;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 4px;
-  color: var(--text-primary);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: 1px solid var(--border-medium);
+  color: rgba(255, 255, 255, 0.55);
   background: transparent;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s var(--ease-mechanical);
 }
 
 .hero__cta:hover {
   background: rgba(255, 255, 255, 0.04);
-  border-color: rgba(255, 255, 255, 0.2);
-  opacity: 1;
+  border-color: rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .hero__cta--primary {
-  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--signal-defense-dim);
+  color: var(--signal-defense);
+  opacity: 0.7;
+}
+
+.hero__cta--primary:hover {
+  opacity: 1;
+  background: var(--signal-defense-subtle);
+  color: var(--signal-defense);
 }
 
 .hero__divider {
   width: 100%;
   height: 1px;
-  background: linear-gradient(90deg, var(--border) 0%, transparent 100%);
+  background: linear-gradient(90deg,
+      rgba(255, 255, 255, 0.06) 0%,
+      rgba(255, 255, 255, 0.08) 50%,
+      transparent 100%);
   margin: 80px 0;
 }
 
@@ -202,17 +272,19 @@ a:hover {
 
 .section__label {
   font-family: var(--font-mono);
-  font-size: 8px;
+  font-size: 9px;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: var(--text-muted);
+  color: var(--signal-defense);
+  opacity: 0.4;
   margin-bottom: 12px;
 }
 
 .section__title {
-  font-family: var(--font-sans);
+  font-family: var(--font-display);
   font-size: 28px;
   font-weight: 500;
+  letter-spacing: -0.02em;
   color: var(--text-primary);
   margin-bottom: 8px;
 }
@@ -233,27 +305,24 @@ a:hover {
 
 .tool-card {
   padding: 32px;
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  background: var(--bg-card);
-  transition: all 0.25s ease;
+  border: 1px solid var(--border-subtle);
+  background: rgba(255, 255, 255, 0.015);
+  transition: all 0.3s var(--ease-mechanical);
   text-decoration: none;
   display: block;
 }
 
 .tool-card:hover {
-  border-color: var(--border-hover);
-  background: var(--bg-elevated);
-  opacity: 1;
+  border-color: var(--border-medium);
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .tool-card__status {
   font-family: var(--font-mono);
-  font-size: 8px;
+  font-size: 9px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   padding: 3px 8px;
-  border-radius: 2px;
   display: inline-block;
   margin-bottom: 16px;
 }
@@ -265,21 +334,22 @@ a:hover {
 }
 
 .tool-card__status--dev {
-  color: rgba(255, 200, 100, 0.5);
-  background: rgba(255, 200, 100, 0.04);
-  border: 1px solid rgba(255, 200, 100, 0.08);
+  color: var(--signal-threat);
+  background: var(--signal-threat-dim);
+  border: 1px solid rgba(212, 160, 58, 0.15);
 }
 
 .tool-card__status--planned {
   color: var(--text-muted);
   background: rgba(255, 255, 255, 0.02);
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-subtle);
 }
 
 .tool-card__name {
-  font-family: var(--font-sans);
+  font-family: var(--font-display);
   font-size: 18px;
   font-weight: 500;
+  letter-spacing: -0.01em;
   color: var(--text-primary);
   margin-bottom: 8px;
 }
@@ -302,10 +372,9 @@ a:hover {
   font-size: 9px;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: var(--text-muted);
+  color: rgba(255, 255, 255, 0.25);
   padding: 2px 8px;
-  border: 1px solid var(--border);
-  border-radius: 2px;
+  border: 1px solid var(--border-subtle);
 }
 
 /* ============================================
@@ -313,7 +382,7 @@ a:hover {
    ============================================ */
 .research-link {
   padding: 80px 0;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--border-subtle);
 }
 
 .research-link__inner {
@@ -328,9 +397,10 @@ a:hover {
 }
 
 .research-link__title {
-  font-family: var(--font-sans);
+  font-family: var(--font-display);
   font-size: 20px;
   font-weight: 500;
+  letter-spacing: -0.02em;
   color: var(--text-primary);
   margin-bottom: 8px;
 }
@@ -344,18 +414,21 @@ a:hover {
 .research-link__cta {
   font-family: var(--font-mono);
   font-size: 11px;
-  color: var(--text-secondary);
-  padding: 10px 20px;
-  border: 1px solid var(--border);
-  border-radius: 4px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--signal-defense);
+  opacity: 0.7;
+  padding: 12px 24px;
+  border: 1px solid var(--signal-defense-dim);
   white-space: nowrap;
-  transition: all 0.2s ease;
+  transition: all 0.2s var(--ease-mechanical);
 }
 
 .research-link__cta:hover {
-  border-color: var(--border-hover);
-  color: var(--text-primary);
   opacity: 1;
+  background: var(--signal-defense-subtle);
+  color: var(--signal-defense);
 }
 
 /* ============================================
@@ -363,7 +436,7 @@ a:hover {
    ============================================ */
 .footer {
   padding: 40px 0;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--border-subtle);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -371,9 +444,10 @@ a:hover {
 
 .footer__brand {
   font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--text-muted);
-  letter-spacing: 0.04em;
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.12);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .footer__links {
@@ -385,13 +459,26 @@ a:hover {
 .footer__link {
   font-family: var(--font-mono);
   font-size: 10px;
-  color: var(--text-muted);
+  color: rgba(255, 255, 255, 0.25);
   letter-spacing: 0.02em;
+  transition: color 0.2s var(--ease-mechanical);
 }
 
 .footer__link:hover {
-  color: var(--text-secondary);
-  opacity: 1;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* ============================================
+   REDUCED MOTION
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 /* ============================================

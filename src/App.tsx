@@ -57,12 +57,14 @@ export default function App() {
     <>
       {/* Navigation */}
       <nav className="nav">
-        <div className="nav__brand">
+        <a href="https://santh.io" className="nav__brand" target="_blank" rel="noopener">
           SANTH<span>STACK</span>
-        </div>
+        </a>
         <ul className="nav__links">
           <li><a href="#tools" className="nav__link">Tools</a></li>
-          <li><a href="https://santh.io" className="nav__link" target="_blank" rel="noopener">Research</a></li>
+          <li><a href="https://santh.io/blog" className="nav__link" target="_blank" rel="noopener">Research</a></li>
+          <li><a href="https://santh.io/collective" className="nav__link" target="_blank" rel="noopener">Defend</a></li>
+          <li><a href="https://santh.io/terminal" className="nav__link" target="_blank" rel="noopener">Train</a></li>
           <li><a href="https://github.com/mukundthiru1" className="nav__link" target="_blank" rel="noopener">GitHub</a></li>
         </ul>
       </nav>
@@ -84,8 +86,8 @@ export default function App() {
             <a href="#tools" className="hero__cta hero__cta--primary">
               View tools →
             </a>
-            <a href="https://santh.io" className="hero__cta" target="_blank" rel="noopener">
-              Read the research
+            <a href="https://santh.io/blog" className="hero__cta" target="_blank" rel="noopener">
+              Read the research →
             </a>
           </div>
           <div className="hero__divider" />
@@ -118,7 +120,7 @@ export default function App() {
                 and patch dissection — all published on santh.io.
               </p>
             </div>
-            <a href="https://santh.io/#blog" className="research-link__cta" target="_blank" rel="noopener">
+            <a href="https://santh.io/blog" className="research-link__cta" target="_blank" rel="noopener">
               santh.io/research →
             </a>
           </div>
@@ -128,11 +130,13 @@ export default function App() {
       {/* Footer */}
       <footer className="container">
         <div className="footer">
-          <div className="footer__brand">SANTH STACK © {new Date().getFullYear()}</div>
+          <div className="footer__brand">Santh © {new Date().getFullYear()}</div>
           <ul className="footer__links">
             <li><a href="https://santh.io" className="footer__link" target="_blank" rel="noopener">santh.io</a></li>
+            <li><a href="https://santh.io/collective" className="footer__link" target="_blank" rel="noopener">INVARIANT</a></li>
+            <li><a href="https://santh.io/terminal" className="footer__link" target="_blank" rel="noopener">VARIANT</a></li>
             <li><a href="https://github.com/mukundthiru1" className="footer__link" target="_blank" rel="noopener">GitHub</a></li>
-            <li><a href="mailto:contact@santh.io" className="footer__link">contact@santh.io</a></li>
+            <li><a href="mailto:contact@santh.io" className="footer__link">Contact</a></li>
           </ul>
         </div>
       </footer>
