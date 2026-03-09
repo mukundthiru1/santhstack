@@ -5,141 +5,160 @@ interface Tool {
   description: string
   status: 'live' | 'dev' | 'planned'
   tags: string[]
-  href?: string
+  github?: string
+  launchHref?: string
+}
+
+const statusStyles = {
+  live: { label: 'Live', className: 'tool-status tool-status--live' },
+  dev: { label: 'Dev', className: 'tool-status tool-status--dev' },
+  planned: { label: 'Planned', className: 'tool-status tool-status--planned' },
 }
 
 const tools: Tool[] = [
   {
+    name: 'INVARIANT',
+    description: 'Web application security detection engine. Edge sensor + RASP + CLI scanner. 168 classes.',
+    status: 'live',
+    tags: ['security', 'web', 'web-app', 'rasp', 'cli'],
+    launchHref: 'https://santh.io/collective',
+  },
+  {
     name: 'Trace',
-    description: 'Passive network security monitor. Captures traffic, discovers devices, builds trust scores through multi-layer analysis — protocol compliance, behavioral envelopes, and stress testing. Runs on your home network, watches everything, trusts nothing.',
+    description: 'Passive network security monitor for local traffic visibility and IDS-style detection.',
     status: 'dev',
-    tags: ['rust', 'network', 'ids', 'passive-recon'],
-    href: 'https://github.com/mukundthiru1/trace',
+    tags: ['rust', 'network', 'ids', 'passive'],
+    github: 'https://github.com/mukundthiru1/trace',
   },
   {
     name: 'Fracture',
-    description: 'App behavioral analysis and system monitor. Drop an APK or IPA for full static analysis, monitor live processes and orphaned telemetry in real time, or talk to the AI about your system\'s risk posture. Desktop app built with Tauri.',
+    description: 'App behavioral analysis and system monitoring for real-time process, APK, and IPA risk assessment.',
     status: 'dev',
-    tags: ['tauri', 'reverse-engineering', 'monitoring', 'llm'],
-    href: 'https://github.com/mukundthiru1/fracture',
+    tags: ['tauri', 'analysis', 'monitoring', 'behavior'],
+    github: 'https://github.com/mukundthiru1/fracture',
+  },
+  {
+    name: 'Vault',
+    description: 'Local secrets manager with zero network communication and AES-256 secure storage.',
+    status: 'planned',
+    tags: ['desktop', 'secrets', 'privacy', 'aes-256'],
+  },
+  {
+    name: 'Lens',
+    description: 'Browser extension security scanner using the INVARIANT engine, running client-side.',
+    status: 'planned',
+    tags: ['browser', 'extension', 'scanner', 'client-side'],
   },
 ]
 
-function StatusBadge({ status }: { status: Tool['status'] }) {
-  const labels = { live: 'Live', dev: 'In Development', planned: 'Planned' }
+function ToolCard({ tool }: { tool: Tool }) {
+  const status = statusStyles[tool.status]
   return (
-    <span className={`tool-card__status tool-card__status--${status}`}>
-      {labels[status]}
-    </span>
+    <article className="tool-card">
+      <div className="tool-card__header">
+        <h2 className="tool-card__name">{tool.name}</h2>
+        <span className={status.className}>{status.label}</span>
+      </div>
+      <p className="tool-card__description">{tool.description}</p>
+      <div className="tool-card__tags" aria-label="tool tags">
+        {tool.tags.map((tag) => (
+          <span key={tag} className="tool-card__tag">
+            {tag}
+          </span>
+        ))}
+      </div>
+      <div className="tool-card__actions">
+        {tool.github ? (
+          <a
+            className="tool-card__link"
+            href={tool.github}
+            target="_blank"
+            rel="noopener"
+          >
+            GitHub
+          </a>
+        ) : (
+          <span className="tool-card__link tool-card__link--muted">No repo yet</span>
+        )}
+        {tool.status === 'live' && tool.launchHref ? (
+          <a
+            className="tool-card__launch"
+            href={tool.launchHref}
+            target="_blank"
+            rel="noopener"
+          >
+            Launch
+          </a>
+        ) : null}
+      </div>
+    </article>
   )
 }
 
-function ToolCard({ tool }: { tool: Tool }) {
-  const Tag = tool.href ? 'a' : 'div'
-  const props = tool.href ? { href: tool.href, target: '_blank', rel: 'noopener' } : {}
+function ToolStatusBar({ tools }: { tools: Tool[] }) {
+  const liveCount = tools.filter((tool) => tool.status === 'live').length
+  const devCount = tools.filter((tool) => tool.status === 'dev').length
+  const plannedCount = tools.filter((tool) => tool.status === 'planned').length
 
   return (
-    <Tag className="tool-card" {...props}>
-      <StatusBadge status={tool.status} />
-      <h3 className="tool-card__name">{tool.name}</h3>
-      <p className="tool-card__desc">{tool.description}</p>
-      <div className="tool-card__tags">
-        {tool.tags.map(tag => (
-          <span key={tag} className="tool-card__tag">{tag}</span>
-        ))}
+    <section className="status-bar" aria-label="tool status dashboard">
+      <div className="status-pill">
+        <span className="status-pill__value">{liveCount}</span>
+        <span className="status-pill__label">Live</span>
       </div>
-    </Tag>
+      <div className="status-pill">
+        <span className="status-pill__value">{devCount}</span>
+        <span className="status-pill__label">In Dev</span>
+      </div>
+      <div className="status-pill">
+        <span className="status-pill__value">{plannedCount}</span>
+        <span className="status-pill__label">Planned</span>
+      </div>
+    </section>
   )
 }
 
 export default function App() {
   return (
-    <>
-      {/* Navigation */}
-      <nav className="nav">
-        <a href="https://santh.io" className="nav__brand" target="_blank" rel="noopener">
-          SANTH<span>STACK</span>
-        </a>
-        <ul className="nav__links">
-          <li><a href="#tools" className="nav__link">Tools</a></li>
-          <li><a href="https://santh.io/blog" className="nav__link" target="_blank" rel="noopener">Research</a></li>
-          <li><a href="https://santh.io/collective" className="nav__link" target="_blank" rel="noopener">Defend</a></li>
-          <li><a href="https://santh.io/terminal" className="nav__link" target="_blank" rel="noopener">Train</a></li>
-          <li><a href="https://github.com/mukundthiru1" className="nav__link" target="_blank" rel="noopener">GitHub</a></li>
-        </ul>
-      </nav>
-
-      <main className="container">
-        {/* Hero */}
-        <section className="hero">
-          <div className="hero__label">Security Tooling</div>
-          <h1 className="hero__title">
-            Tools built from<br />
-            vulnerability research.
+    <div className="app">
+      <main className="stack-shell">
+        <header className="stack-header">
+          <p className="stack-header__kicker">Santh Stack</p>
+          <h1 className="stack-header__title">
+            Santh Stack — Security tools built for builders
           </h1>
-          <p className="hero__subtitle">
-            Every tool starts as a CVE breakdown. When the research reveals
-            a detection gap, we build the scanner. When the patch analysis
-            exposes a pattern, we build the detector.
-          </p>
-          <div className="hero__cta-row">
-            <a href="#tools" className="hero__cta hero__cta--primary">
-              View tools →
-            </a>
-            <a href="https://santh.io/blog" className="hero__cta" target="_blank" rel="noopener">
-              Read the research →
-            </a>
-          </div>
-          <div className="hero__divider" />
-        </section>
+          <p className="stack-header__tagline">Everything runs locally. Nothing phones home.</p>
+        </header>
 
-        {/* Tools Grid */}
-        <section className="tools" id="tools">
-          <div className="section__label">Tooling</div>
-          <h2 className="section__title">The Stack</h2>
-          <p className="section__subtitle">
-            Open security tools. Each one traces back to a specific
-            piece of research.
-          </p>
+        <ToolStatusBar tools={tools} />
 
-          <div className="tools__grid">
-            {tools.map((tool) => (
-              <ToolCard key={tool.name} tool={tool} />
-            ))}
-          </div>
-        </section>
-
-        {/* Research Cross-Link */}
-        <section className="research-link">
-          <div className="research-link__inner">
-            <div className="research-link__text">
-              <h2 className="research-link__title">The Research Behind the Tools</h2>
-              <p className="research-link__desc">
-                Every tool in the stack is grounded in independent
-                vulnerability research. CVE breakdowns, exploit analysis,
-                and patch dissection — all published on santh.io.
-              </p>
-            </div>
-            <a href="https://santh.io/blog" className="research-link__cta" target="_blank" rel="noopener">
-              santh.io/research →
-            </a>
-          </div>
+        <section className="tool-grid" aria-label="tool launcher">
+          {tools.map((tool) => (
+            <ToolCard key={tool.name} tool={tool} />
+          ))}
         </section>
       </main>
 
-      {/* Footer */}
-      <footer className="container">
-        <div className="footer">
-          <div className="footer__brand">Santh © {new Date().getFullYear()}</div>
-          <ul className="footer__links">
-            <li><a href="https://santh.io" className="footer__link" target="_blank" rel="noopener">santh.io</a></li>
-            <li><a href="https://santh.io/collective" className="footer__link" target="_blank" rel="noopener">INVARIANT</a></li>
-            <li><a href="https://santh.io/terminal" className="footer__link" target="_blank" rel="noopener">VARIANT</a></li>
-            <li><a href="https://github.com/mukundthiru1" className="footer__link" target="_blank" rel="noopener">GitHub</a></li>
-            <li><a href="mailto:contact@santh.io" className="footer__link">Contact</a></li>
-          </ul>
-        </div>
+      <footer className="stack-footer">
+        <p className="stack-footer__brand">santhstack.santh.io</p>
+        <nav className="stack-footer__links">
+          <a href="https://santh.io" target="_blank" rel="noopener">
+            santh.io
+          </a>
+          <a href="https://santh.io/collective" target="_blank" rel="noopener">
+            collective.santh.io
+          </a>
+          <a href="https://santh.io/terminal" target="_blank" rel="noopener">
+            terminal.santh.io
+          </a>
+          <a href="https://santh.io/blog" target="_blank" rel="noopener">
+            blog.santh.io
+          </a>
+          <a href="https://github.com/mukundthiru1" target="_blank" rel="noopener">
+            GitHub
+          </a>
+        </nav>
       </footer>
-    </>
+    </div>
   )
 }
